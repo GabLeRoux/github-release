@@ -6,6 +6,7 @@ before_install:
 - docker pull golang:alpine
 install:
 - make
+- rm github-release
 script:
 - export IMAGE_NAME=gableroux/gothub
 - docker build -f Dockerfile -t $IMAGE_NAME:$COMMIT .
