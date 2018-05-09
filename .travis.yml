@@ -6,19 +6,15 @@ before_install:
 - docker pull golang:alpine
 install:
 - make
-- rm github-release
 script:
 - export IMAGE_NAME=gableroux/gothub
 - docker build -f Dockerfile -t $IMAGE_NAME:$COMMIT .
-deploy:
-  provider: script
-  script:
-  - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:latest
-  - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
-  - docker push "${IMAGE_NAME}:latest"
-  - docker push "${IMAGE_NAME}:${COMMIT}"
-  on:
-    branch: master
+- docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+- docker push "${IMAGE_NAME}:${COMMIT}"
+- if [ "$TRAVIS_BRANCH" == "master" ]; then 
+    docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:latest
+    docker push "${IMAGE_NAME}:latest"
+  fi
 env:
   global:
   - COMMIT=${TRAVIS_COMMIT::8}
