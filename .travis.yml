@@ -11,7 +11,7 @@ install:
 - make
 
 script:
-- export DOCKER_USER=itchio
+- export DOCKER_USER=gableroux
 - export REPO=$DOCKER_USER/gothub
 - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
 - docker build -f Dockerfile -t $REPO:$COMMIT .
