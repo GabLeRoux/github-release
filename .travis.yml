@@ -8,7 +8,11 @@ install:
 - make
 script: |
   export IMAGE_NAME=gableroux/gothub
-  docker build -f Dockerfile -t $IMAGE_NAME:$COMMIT .
+  docker build \
+    --arguments user=gableroux \
+    --repo=github-release \
+    Dockerfile \
+    -t $IMAGE_NAME:$COMMIT .
   docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   docker push "${IMAGE_NAME}:${COMMIT}"
   if [ "$TRAVIS_BRANCH" == "master" ]; then

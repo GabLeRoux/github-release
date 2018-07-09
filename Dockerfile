@@ -1,9 +1,12 @@
 FROM golang:alpine as builder
 
+ARG user=itchio
+ARG repo=gothub
+
 RUN apk update && \
     apk upgrade && \
     apk add -u git && \
-    go get github.com/itchio/gothub
+    go get github.com/$user/$repo
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates jq
