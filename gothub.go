@@ -68,7 +68,7 @@ type Options struct {
 		Repo  string `goptions:"-r, --repo, description='Github repo (required if $GITHUB_REPO not set)'"`
 		Tag   string `goptions:"-t, --tag, description='Git tag to query (optional)'"`
 		JSON  bool   `goptions:"-j, --json, description='Emit info as JSON instead of text'"`
-		Latest bool  `goptions:"-l, --latest, description=''"`
+		Latest bool   `goptions:"-l, --latest, description='Display latest release'"`
 	} `goptions:"info"`
 }
 
