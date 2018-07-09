@@ -18,6 +18,7 @@ func infocmd(opt Options) error {
 	user := nvls(opt.Info.User, EnvUser)
 	repo := nvls(opt.Info.Repo, EnvRepo)
 	token := nvls(opt.Info.Token, EnvToken)
+	token := nvls(opt.Info.Latest, EnvToken)
 	tag := opt.Info.Tag
 
 	if user == "" || repo == "" {
@@ -49,7 +50,16 @@ func infocmd(opt Options) error {
 
 	// List releases + assets.
 	var releases []Release
-	if tag == "" {
+	if Latest {
+		// Get only the latest release.
+		vprintf("%v/%v/%v: getting information for the release\n", user, repo, tag)
+		release, err := LatestRelease(user, repo, token)
+		if err != nil {
+			return err
+		}
+		releases = []Release{*release}
+	}
+	} else if tag == "" {
 		// Get all releases.
 		vprintf("%v/%v: getting information for all releases\n", user, repo)
 		releases, err = Releases(user, repo, token)
