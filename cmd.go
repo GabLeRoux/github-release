@@ -58,6 +58,7 @@ func infocmd(opt Options) error {
 			return err
 		}
 		releases = []Release{*release}
+		return renderer(nil, releases)
 	} else if tag == "" {
 		// Get all releases.
 		vprintf("%v/%v: getting information for all releases\n", user, repo)
