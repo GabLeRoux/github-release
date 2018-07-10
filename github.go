@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aktau/github-release/github"
+	"./github"
 	"github.com/voxelbrain/goptions"
 )
 
@@ -107,7 +107,7 @@ func main() {
 	goptions.ParseAndFail(&options)
 
 	if options.Version {
-		fmt.Printf("gothub v%s\n", VERSION)
+		fmt.Printf("github-release v%s\n", VERSION)
 		return
 	}
 

@@ -1,12 +1,12 @@
-gothub
+github-release
 ======
 
 [![Build Status](https://travis-ci.com/GabLeRoux/github-release.svg?branch=master)](https://travis-ci.com/GabLeRoux/github-release)
-[![Docker Stars](https://img.shields.io/docker/stars/gableroux/gothub.svg)](https://hub.docker.com/r/gableroux/gothub)
-[![Docker Pulls](https://img.shields.io/docker/pulls/gableroux/gothub.svg)](https://hub.docker.com/r/gableroux/gothub)
-[![Image](https://images.microbadger.com/badges/image/gableroux/gothub.svg)](https://microbadger.com/images/gableroux/gothub)
-[![Version](https://images.microbadger.com/badges/version/gableroux/gothub.svg)](https://microbadger.com/images/gableroux/gothub)
-[![Layers](https://images.microbadger.com/badges/image/gableroux/gothub.svg)](https://microbadger.com/images/gableroux/gothub)
+[![Docker Stars](https://img.shields.io/docker/stars/gableroux/github-release.svg)](https://hub.docker.com/r/gableroux/github-release)
+[![Docker Pulls](https://img.shields.io/docker/pulls/gableroux/github-release.svg)](https://hub.docker.com/r/gableroux/github-release)
+[![Image](https://images.microbadger.com/badges/image/gableroux/github-release.svg)](https://microbadger.com/images/gableroux/github-release)
+[![Version](https://images.microbadger.com/badges/version/gableroux/github-release.svg)](https://microbadger.com/images/gableroux/github-release)
+[![Layers](https://images.microbadger.com/badges/image/gableroux/github-release.svg)](https://microbadger.com/images/gableroux/github-release)
 
 *This is a fork of [aktau/github-release](https://github.com/aktau/github-release) with
 a few tweaks. All the original credit should go directly to Nicolas Hillegeer :)*
@@ -17,18 +17,13 @@ you to attach files to those releases.
 
 It interacts with the [github releases API](http://developer.github.com/v3/repos/releases).
 Though it's entirely possibly to [do all these things with
-cURL](https://github.com/blog/1645-releases-api-preview), It's not
+cURL](https://github.com/blog/1645-releases-api-preview). It's not
 really that user-friendly. For example, you need to first query the API
 to find the id of the release you want, before you can upload an
-artifact. `gothub` takes care of those little details.
+artifact. `github-release` takes care of those little details.
 
 It might still be a bit rough around the edges, pull requests are
 welcome!
-
-**NOTE**: I've been made aware of the existence of the
-[gothub](https://github.com/itchio/gothub) fork. Since I have very little
-time to work on the project and have been a really bad maintainer, I suggest
-checking it out to see if your issues have been solved there.
 
 How to install
 ==============
@@ -36,12 +31,12 @@ How to install
 If/when you have Go installed, you can just do:
 
 ```sh
-go get github.com/itchio/gothub
+go get github.com/gableroux/github-release
 ```
 
 This will automatically download, compile and install the app.
 
-After that you should have a `gothub` executable in your
+After that you should have a `github-release` executable in your
 `$GOPATH/bin`.
 
 How to use
@@ -49,7 +44,7 @@ How to use
 
 **NOTE**: for these examples I've [created a github
 token](https://help.github.com/articles/creating-an-access-token-for-command-line-use)
-and set it as the env variable `GITHUB_TOKEN`. `gothub` will
+and set it as the env variable `GITHUB_TOKEN`. `github-release` will
 automatically pick it up from the environment so that you don't have to
 pass it as an argument.
 
@@ -58,13 +53,13 @@ pass it as an argument.
 export GITHUB_TOKEN=...
 
 # check the help
-$ gothub --help
+$ github-release --help
 
 # make your tag and upload
 $ git tag ... && git push --tags
 
 # check the current tags and existing releases of the repo
-$ gothub info -u aktau -r gofinance
+$ github-release info -u gableroux -r gofinance
 git tags:
 - v0.1.0 (commit: https://api.github.com/repos/aktau/gofinance/commits/f562727ce83ce8971a8569a1879219e41d56a756)
 releases:
@@ -72,8 +67,8 @@ releases:
   - artifact: github.go, downloads: 0, state: uploaded, type: application/octet-stream, size: 1.9KB, id: 68616
 
 # create a formal release
-$ gothub release \
-    --user aktau \
+$ github-release release \
+    --user gableroux \
     --repo gofinance \
     --tag v0.1.0 \
     --name "the wolf of source street" \
@@ -83,27 +78,27 @@ $ gothub release \
 # you've made a mistake, but you can edit the release without
 # having to delete it first (this also means you can edit without having
 # to upload your files again)
-$ gothub edit \
-    --user aktau \
+$ github-release edit \
+    --user gableroux \
     --repo gofinance \
     --tag v0.1.0 \
     --name "Highlander II: The Quickening" \
     --description "This is the actual description!"
 
-# upload a file, for example the OSX/AMD64 binary of aktau's gofinance app
-$ gothub upload \
-    --user aktau \
+# upload a file, for example the OSX/AMD64 binary of gableroux's gofinance app
+$ github-release upload \
+    --user gableroux \
     --repo gofinance \
     --tag v0.1.0 \
     --name "gofinance-osx-amd64" \
     --file bin/darwin/amd64/gofinance
 
 # upload other files...
-$ gothub upload ...
+$ github-release upload ...
 
 # you're not happy with it, so delete it
-$ gothub delete \
-    --user aktau \
+$ github-release delete \
+    --user gableroux \
     --repo gofinance \
     --tag v0.1.0
 ```
@@ -114,8 +109,8 @@ exact same name in a release
 
 ```sh
 # re-upload a file, we mean it this time!
-$ gothub upload \
-    --user aktau \
+$ github-release upload \
+    --user gableroux \
     --repo gofinance \
     --tag v0.1.0 \
     --name "gofinance-osx-amd64" \

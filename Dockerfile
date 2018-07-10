@@ -1,6 +1,6 @@
 FROM golang:alpine as builder
 
-ARG user=itchio
+ARG user=gableroux
 ARG repo=gothub
 
 RUN apk update && \
