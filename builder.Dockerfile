@@ -2,7 +2,10 @@ FROM golang:alpine
 
 RUN apk update && \
     apk upgrade && \
-    apk add -u git make
+    apk add -u \
+    git \
+    make \
+    zip
 
 RUN apk --no-cache add ca-certificates jq
 

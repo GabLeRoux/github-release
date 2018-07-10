@@ -22,3 +22,9 @@ script: |
 env:
   global:
   - COMMIT=${TRAVIS_COMMIT::8}
+jobs:
+  include:
+    - stage: deploy
+      if: tag IS present
+      script: make release
+
