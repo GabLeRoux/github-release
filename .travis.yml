@@ -9,7 +9,7 @@ install:
 script: |
   export IMAGE_NAME=gableroux/gothub
   docker build \
-    --arguments user=gableroux \
+    --build-arg user=gableroux \
     --repo=github-release \
     Dockerfile \
     -t $IMAGE_NAME:$COMMIT .
