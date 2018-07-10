@@ -5,12 +5,14 @@ services:
 before_install:
 - docker pull golang:alpine
 install:
-- make
+- make \
+  USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
+  EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
 script: |
   export IMAGE_NAME=gableroux/gothub
   docker build \
-    --build-arg user=gableroux \
-    --repo=github-release \
+    --build-arg user=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
+    --build-arg repo=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}') \
     Dockerfile \
     -t $IMAGE_NAME:$COMMIT .
   docker login -u $REGISTRY_USER -p $REGISTRY_PASS
@@ -27,4 +29,3 @@ jobs:
     - stage: deploy
       if: tag IS present
       script: make release
-
