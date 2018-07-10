@@ -1,7 +1,12 @@
-[![Build Status](https://travis-ci.org/itchio/gothub.svg?branch=master)](https://travis-ci.org/itchio/gothub)
-
 gothub
 ======
+
+[![Build Status](https://travis-ci.com/GabLeRoux/github-release.svg?branch=master)](https://travis-ci.com/GabLeRoux/github-release)
+[![Docker Stars](https://img.shields.io/docker/stars/gableroux/gothub.svg)](https://hub.docker.com/r/gableroux/gothub)
+[![Docker Pulls](https://img.shields.io/docker/pulls/gableroux/gothub.svg)](https://hub.docker.com/r/gableroux/gothub)
+[![Image](https://images.microbadger.com/badges/image/gableroux/gothub.svg)](https://microbadger.com/images/gableroux/gothub)
+[![Version](https://images.microbadger.com/badges/version/gableroux/gothub.svg)](https://microbadger.com/images/gableroux/gothub)
+[![Layers](https://images.microbadger.com/badges/image/gableroux/gothub.svg)](https://microbadger.com/images/gableroux/gothub)
 
 *This is a fork of [aktau/github-release](https://github.com/aktau/github-release) with
 a few tweaks. All the original credit should go directly to Nicolas Hillegeer :)*
