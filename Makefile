@@ -57,7 +57,6 @@ bin/windows/amd64/$(EXECUTABLE).exe:
 # git tag -a v$(RELEASE) -m 'release $(RELEASE)'
 release: clean
 	$(MAKE) bin/tmp/$(EXECUTABLE) $(COMPRESSED_EXECUTABLE_TARGETS)
-	git push && git push --tags
 	git log --format=%B $(LAST_TAG) -1 | \
 		bin/tmp/$(EXECUTABLE) release -u $(USER) -r $(EXECUTABLE) \
 		-t $(LAST_TAG) -n $(LAST_TAG) -d - || true
