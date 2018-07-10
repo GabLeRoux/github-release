@@ -127,7 +127,7 @@ GitHub Enterprise Support
 =========================
 You can point to a different GitHub API endpoint via the environment variable ```GITHUB_API```:
 
-```
+```sh
 export GITHUB_API=http://github.company.com/api/v3
 ```
 
