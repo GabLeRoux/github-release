@@ -7,6 +7,10 @@ env:
   global:
     - COMMIT=${TRAVIS_COMMIT::8}
     - DEP_VERSION=v0.4.1
+    - IMAGE_NAME=$(echo $TRAVIS_REPO_SLUG | tr '[:upper:]' '[:lower:]')
+    - USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}')
+    - REPO=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
+    - EXECUTABLE=$REPO
 jobs:
   include:
     - stage: build
@@ -22,13 +26,10 @@ jobs:
       install:
         - dep ensure
       script: |
-        make \
-          USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
-          EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
-        export IMAGE_NAME=$TRAVIS_REPO_SLUG
+        make USER=$USER EXECUTABLE=$EXECUTABLE
         docker build \
-          --build-arg USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
-          --build-arg REPO=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}') \
+          --build-arg USER=$USER \
+          --build-arg REPO=$REPO \
           Dockerfile \
           -t ${IMAGE_NAME}:${COMMIT} .
         docker login -u $REGISTRY_USER -p $REGISTRY_PASS
@@ -39,10 +40,7 @@ jobs:
         fi
     - stage: deploy
       if: tag IS present
-      script: |
-        make release \
-          USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
-          EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
+      script: make release USER=$USER EXECUTABLE=$EXECUTABLE
     - stage: deploy
       if: tag IS present
       script:
