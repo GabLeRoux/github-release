@@ -30,7 +30,6 @@ jobs:
         docker build \
           --build-arg USER=$USER \
           --build-arg REPO=$REPO \
-          Dockerfile \
           -t ${IMAGE_NAME}:${COMMIT} .
         docker login -u $REGISTRY_USER -p $REGISTRY_PASS
         docker push "${IMAGE_NAME}:${COMMIT}"
