@@ -46,4 +46,5 @@ jobs:
       script:
         - docker pull ${IMAGE_NAME}:${COMMIT}
         - docker tag ${IMAGE_NAME}:${COMMIT} ${IMAGE_NAME}:$TRAVIS_TAG
+        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
         - docker push "${IMAGE_NAME}:$TRAVIS_TAG"
