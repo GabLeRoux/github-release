@@ -4,11 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"./github"
 	"github.com/voxelbrain/goptions"
 )
-
-const GH_URL = "https://github.com"
 
 type Options struct {
 	Help      goptions.Help `goptions:"-h, --help, description='Show this help'"`
@@ -117,7 +114,6 @@ func main() {
 	}
 
 	VERBOSITY = len(options.Verbosity)
-	github.VERBOSITY = VERBOSITY
 
 	if cmd, found := commands[options.Verbs]; found {
 		err := cmd(options)

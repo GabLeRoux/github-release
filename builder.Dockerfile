@@ -1,16 +1,27 @@
-FROM golang:alpine
+FROM golang:1.9-alpine AS builder
+
+ARG USER=gableroux
+ARG REPO=github-release
+ARG DEP_VERSION=v0.4.1
 
 RUN apk update && \
-    apk upgrade && \
-    apk add -u \
-    git \
-    make \
-    zip
+  apk add \
+  curl \
+  git \
+  make \
+  zip
 
-RUN apk --no-cache add ca-certificates jq
+RUN curl -fsSL -o /usr/local/bin/dep https://github.com/golang/dep/releases/download/$DEP_VERSION/dep-linux-amd64 && chmod +x /usr/local/bin/dep
 
-WORKDIR /app
-COPY . /app
+RUN mkdir -p /go/src/github.com/$USER/$REPO
+WORKDIR /go/src/github.com/$USER/$REPO
+
+COPY Gopkg.toml Gopkg.lock ./
+
+RUN dep ensure -vendor-only
+
+COPY . ./
+
 RUN make
 
-CMD ["/app/github-release"]
+CMD ["/go/src/github.com/$USER/$REPO/github-release"]

@@ -11,7 +11,7 @@ import (
 	"os"
 	"strconv"
 
-	"./github"
+	"github.com/gableroux/github-release/github"
 )
 
 func infocmd(opt Options) error {
@@ -476,7 +476,7 @@ func deletecmd(opt Options) error {
 	vprintf("release %v has id %v\n", tag, id)
 
 	baseURL := nvls(EnvApiEndpoint, github.DefaultBaseURL)
-	resp, err := github.DoAuthRequest("DELETE", baseURL+ fmt.Sprintf("/repos/%s/%s/releases/%d",
+	resp, err := github.DoAuthRequest("DELETE", baseURL+fmt.Sprintf("/repos/%s/%s/releases/%d",
 		user, repo, id), "application/json", token, nil, nil)
 	if err != nil {
 		return fmt.Errorf("release deletion failed: %v", err)

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"./github"
+	"github.com/gableroux/github-release/github"
 )
 
 const (

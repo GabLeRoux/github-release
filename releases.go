@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"./github"
 	"github.com/dustin/go-humanize"
+	"github.com/gableroux/github-release/github"
 )
 
 const (

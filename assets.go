@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"./github"
+	"github.com/gableroux/github-release/github"
 )
 
 const (

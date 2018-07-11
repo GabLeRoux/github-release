@@ -1,16 +1,16 @@
-FROM golang:alpine as builder
+FROM golang:1.9 AS builder
 
-ARG user=gableroux
-ARG repo=gothub
+ARG USER=gableroux
+ARG REPO=github-release
 
 RUN apk update && \
     apk upgrade && \
     apk add -u git && \
-    go get github.com/$user/$repo
+    go get github.com/$USER/$REPO
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates jq
 
-COPY --from=builder /go/bin/gothub /bin/gothub
+COPY --from=builder /go/bin/github-release /bin/github-release
 
-CMD ["gothub"]
+CMD ["github-release"]
