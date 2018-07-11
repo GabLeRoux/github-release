@@ -1,45 +1,50 @@
 language: go
 sudo: required
 stages:
-- build
-- deploy
+  - build
+  - deploy
 env:
   global:
-  - COMMIT=${TRAVIS_COMMIT::8}
-  - DEP_VERSION=v0.4.1
+    - COMMIT=${TRAVIS_COMMIT::8}
+    - DEP_VERSION=v0.4.1
 jobs:
   include:
     - stage: build
       services:
-      - docker
+        - docker
       before_install:
-      - docker pull golang:alpine
+        - docker pull golang:alpine
+      env:
+        - DEP_VERSION="v0.4.1"
+      before_install:
+        - curl -L -s https://github.com/golang/dep/releases/download/${DEP_VERSION}/dep-linux-amd64 -o $GOPATH/bin/dep
+        - chmod +x $GOPATH/bin/dep
       install:
-      - curl -fsSL -o /usr/local/bin/dep https://github.com/golang/dep/releases/download/$DEP_VERSION/dep-linux-amd64 && chmod +x /usr/local/bin/dep
-      - make \
-          USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
-          EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
-      script: |
-        export IMAGE_NAME=$TRAVIS_REPO_SLUG
-        docker build \
-          --build-arg USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
-          --build-arg REPO=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}') \
-          Dockerfile \
-          -t ${IMAGE_NAME}:${COMMIT} .
-        docker login -u $REGISTRY_USER -p $REGISTRY_PASS
-        docker push "${IMAGE_NAME}:${COMMIT}"
-        if [ "$TRAVIS_BRANCH" == "master" ]; then
-          docker tag ${IMAGE_NAME}:${COMMIT} ${IMAGE_NAME}:latest
-          docker push "${IMAGE_NAME}:latest"
-        fi
+        - dep ensure
+      script:
+        - make \
+            USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
+            EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
+        - export IMAGE_NAME=$TRAVIS_REPO_SLUG
+        - docker build \
+            --build-arg USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
+            --build-arg REPO=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}') \
+            Dockerfile \
+            -t ${IMAGE_NAME}:${COMMIT} .
+        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+        - docker push "${IMAGE_NAME}:${COMMIT}"
+        - if [ "$TRAVIS_BRANCH" == "master" ]; then
+            docker tag ${IMAGE_NAME}:${COMMIT} ${IMAGE_NAME}:latest
+            docker push "${IMAGE_NAME}:latest"
+          fi
     - stage: deploy
       if: tag IS present
-      script: |
-        make release \
-          USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
-          EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
+      script:
+        - make release \
+            USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
+            EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
     - stage: deploy
       if: tag IS present
-      script: |
-        docker tag ${IMAGE_NAME}:${COMMIT} ${IMAGE_NAME}:$TRAVIS_TAG
-        docker push "${IMAGE_NAME}:$TRAVIS_TAG"
+      script:
+        - docker tag ${IMAGE_NAME}:${COMMIT} ${IMAGE_NAME}:$TRAVIS_TAG
+        - docker push "${IMAGE_NAME}:$TRAVIS_TAG"
