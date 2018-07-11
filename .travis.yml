@@ -21,28 +21,28 @@ jobs:
         - chmod +x $GOPATH/bin/dep
       install:
         - dep ensure
-      script:
-        - make \
-            USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
-            EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
-        - export IMAGE_NAME=$TRAVIS_REPO_SLUG
-        - docker build \
-            --build-arg USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
-            --build-arg REPO=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}') \
-            Dockerfile \
-            -t ${IMAGE_NAME}:${COMMIT} .
-        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
-        - docker push "${IMAGE_NAME}:${COMMIT}"
-        - if [ "$TRAVIS_BRANCH" == "master" ]; then
-            docker tag ${IMAGE_NAME}:${COMMIT} ${IMAGE_NAME}:latest
-            docker push "${IMAGE_NAME}:latest"
-          fi
+      script: |
+        make \
+          USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
+          EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
+        export IMAGE_NAME=$TRAVIS_REPO_SLUG
+        docker build \
+          --build-arg USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
+          --build-arg REPO=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}') \
+          Dockerfile \
+          -t ${IMAGE_NAME}:${COMMIT} .
+        docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+        docker push "${IMAGE_NAME}:${COMMIT}"
+        if [ "$TRAVIS_BRANCH" == "master" ]; then
+          docker tag ${IMAGE_NAME}:${COMMIT} ${IMAGE_NAME}:latest
+          docker push "${IMAGE_NAME}:latest"
+        fi
     - stage: deploy
       if: tag IS present
-      script:
-        - make release \
-            USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
-            EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
+      script: |
+        make release \
+          USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}') \
+          EXECUTABLE=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
     - stage: deploy
       if: tag IS present
       script:
