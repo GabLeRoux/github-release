@@ -11,20 +11,20 @@ env:
     - USER=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $1}')
     - REPO=$(echo $TRAVIS_REPO_SLUG | awk -F '/' '{print $2}')
     - EXECUTABLE=$REPO
+.golang_dependencies: &golang_dependencies
+  env:
+    - DEP_VERSION="v0.4.1"
+  before_install:
+    - curl -L -s https://github.com/golang/dep/releases/download/${DEP_VERSION}/dep-linux-amd64 -o $GOPATH/bin/dep
+    - chmod +x $GOPATH/bin/dep
+  install:
+    - dep ensure
 jobs:
   include:
     - stage: build
+      <<: *golang_dependencies
       services:
         - docker
-      before_install:
-        - docker pull golang:alpine
-      env:
-        - DEP_VERSION="v0.4.1"
-      before_install:
-        - curl -L -s https://github.com/golang/dep/releases/download/${DEP_VERSION}/dep-linux-amd64 -o $GOPATH/bin/dep
-        - chmod +x $GOPATH/bin/dep
-      install:
-        - dep ensure
       script: |
         make USER=$USER EXECUTABLE=$EXECUTABLE
         docker build \
@@ -39,6 +39,7 @@ jobs:
         fi
     - stage: deploy
       if: tag IS present
+      <<: *golang_dependencies
       script: make release USER=$USER EXECUTABLE=$EXECUTABLE
     - stage: deploy
       if: tag IS present
